@@ -1,23 +1,8 @@
 import { categories } from '../data'
 
-export default function Categories() {
-  return (
-    <section className="section categories" id="categories" aria-labelledby="categories-title">
-      <div className="container">
-        <div className="section-heading split-heading">
-          <div><p className="eyebrow">Shop with purpose</p><h2 id="categories-title">Made for what you grow</h2></div>
-          <p>Start with your plants, then find the nutrition that fits. No guesswork or crowded ingredient lists.</p>
-        </div>
-        <div className="category-grid">
-          {categories.map((category) => (
-            <a className="category-card" href="#shop" key={category.name}>
-              <span className="category-symbol" aria-hidden="true">{category.symbol}</span>
-              <span><strong>{category.name}</strong><small>{category.note}</small></span>
-              <span className="arrow" aria-hidden="true">↗</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+export default function Categories({ onChoose }: { onChoose: (category: string) => void }) {
+  return <section className="section categories" id="categories" aria-labelledby="category-heading"><div className="container">
+    <div className="section-heading"><div><p className="eyebrow">Find your formula</p><h2 id="category-heading">Shop by what you grow</h2></div><p>Plants have different appetites. Start with the crop and we’ll help with the rest.</p></div>
+    <div className="category-grid">{categories.map((category, index) => <button className="category-card" type="button" key={category.name} onClick={() => onChoose(category.name)}><span className="category-number">0{index + 1}</span><span className="category-icon" aria-hidden="true">{category.icon}</span><strong>{category.name}</strong><small>{category.note}</small><span className="category-arrow" aria-hidden="true">↗</span></button>)}</div>
+  </div></section>
 }
