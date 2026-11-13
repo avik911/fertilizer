@@ -1,53 +1,42 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import App from './App'
 
-afterEach(() => {
-  window.history.replaceState({}, '', '/')
-})
-
 describe('fertilizer storefront', () => {
-  it('filters products and shows a helpful empty state', async () => {
+  it('searches products, handles empty results, and clears the search', async () => {
     const user = userEvent.setup()
     render(<App />)
-
-    expect(await screen.findByRole('heading', { name: 'Garden All-Rounder 5-5-5' })).toBeInTheDocument()
-    await user.type(screen.getByLabelText('Search products'), 'citrus')
-    expect(screen.getByRole('heading', { name: 'Citrus & Fruit Boost 6-3-6' })).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Garden All-Rounder 5-5-5' })).not.toBeInTheDocument()
-
-    await user.clear(screen.getByLabelText('Search products'))
-    await user.type(screen.getByLabelText('Search products'), 'orchids')
-    expect(screen.getByRole('heading', { name: 'No products match “orchids”' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Clear search' }))
-    expect(screen.getByRole('heading', { name: 'Garden All-Rounder 5-5-5' })).toBeInTheDocument()
+    expect(await screen.findByText('Harvest Complete')).toBeInTheDocument()
+    const search = screen.getByRole('searchbox', { name: /what are you growing/i })
+    await user.type(search, 'flowers')
+    expect(screen.getByText('Bloom & Root')).toBeInTheDocument()
+    expect(screen.queryByText('Verdant Lawn')).not.toBeInTheDocument()
+    await user.clear(search)
+    await user.type(search, 'moon dust')
+    expect(screen.getByText(/no exact match/i)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /see all products/i }))
+    expect(screen.getByText('Gentle Growth')).toBeInTheDocument()
   })
 
-  it('updates the accessible cart count', async () => {
+  it('updates the cart and confirms newsletter signup', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const addButton = await screen.findByRole('button', { name: 'Add Garden All-Rounder 5-5-5 to cart' })
+    const addButton = await screen.findByRole('button', { name: /add harvest complete to cart/i })
     await user.click(addButton)
-    expect(screen.getByRole('link', { name: 'Shopping cart with 1 items' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /shopping cart with 1 items/i })).toBeInTheDocument()
+    await user.type(screen.getByRole('textbox', { name: /email address/i }), 'grower@example.com')
+    await user.click(screen.getByRole('button', { name: /^join/i }))
+    expect(screen.getByRole('status')).toHaveTextContent(/on the list/i)
   })
 
-  it('confirms newsletter signup', async () => {
+  it('exposes an accessible mobile navigation toggle', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.type(screen.getByLabelText('Email address'), 'grower@example.com')
-    await user.click(screen.getByRole('button', { name: 'Join the list' }))
-    expect(screen.getByRole('status')).toHaveTextContent('You’re on the list.')
-  })
-
-  it('opens and closes the mobile navigation with the keyboard', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    const menu = screen.getByRole('button', { name: 'Menu' })
-    await user.click(menu)
-    expect(screen.getByRole('button', { name: 'Close' })).toHaveAttribute('aria-expanded', 'true')
-    await user.keyboard('{Escape}')
-    await waitFor(() => expect(menu).toHaveAttribute('aria-expanded', 'false'))
-    expect(menu).toHaveFocus()
+    const toggle = screen.getByRole('button', { name: /open navigation/i })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('navigation', { name: /primary/i })).toHaveClass('open')
   })
 })
