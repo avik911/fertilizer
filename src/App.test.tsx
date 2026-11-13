@@ -1,15 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { expect, test, vi } from 'vitest'
+import { expect, test } from 'vitest'
 import App from './App'
 
 test('presents the store and handles a product search', async () => {
-  vi.useFakeTimers()
   render(<App />)
   expect(screen.getByRole('heading', { name: /better soil/i })).toBeInTheDocument()
   fireEvent.change(screen.getByLabelText(/search fertilizer/i), { target: { value: 'tomato' } })
-  vi.runAllTimers()
-  expect(await screen.findByText('Tomato & Vegetable')).toBeInTheDocument()
-  vi.useRealTimers()
+  expect(await screen.findByText('Tomato & Vegetable', {}, { timeout: 1500 })).toBeInTheDocument()
+  expect(screen.queryByText('Lawn Revival')).not.toBeInTheDocument()
 })
 
 test('newsletter confirms a valid subscription', () => {
