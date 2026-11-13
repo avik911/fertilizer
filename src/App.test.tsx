@@ -7,16 +7,16 @@ describe('fertilizer storefront', () => {
   it('searches products, handles empty results, and clears the search', async () => {
     const user = userEvent.setup()
     render(<App />)
-    expect(await screen.findByText('Harvest Complete')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Harvest Complete' })).toBeInTheDocument()
     const search = screen.getByRole('searchbox', { name: /what are you growing/i })
     await user.type(search, 'flowers')
-    expect(screen.getByText('Bloom & Root')).toBeInTheDocument()
-    expect(screen.queryByText('Verdant Lawn')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Bloom & Root' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Verdant Lawn' })).not.toBeInTheDocument()
     await user.clear(search)
     await user.type(search, 'moon dust')
     expect(screen.getByText(/no exact match/i)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /see all products/i }))
-    expect(screen.getByText('Gentle Growth')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Gentle Growth' })).toBeInTheDocument()
   })
 
   it('updates the cart and confirms newsletter signup', async () => {
