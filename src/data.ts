@@ -1,24 +1,15 @@
-export type Product = {
-  id: number
-  name: string
-  category: string
-  description: string
-  price: number
-  size: string
-  badge?: string
-  tone: 'leaf' | 'clay' | 'gold' | 'sage'
-}
+export type Product = { id: number; name: string; description: string; category: string; formula: string; price: number; size: string; badge?: string; tone: string }
 
 export const categories = [
-  { name: 'Vegetable gardens', note: 'Balanced food for abundant beds', symbol: 'V' },
-  { name: 'Fruit & citrus', note: 'Support blossom through harvest', symbol: 'F' },
-  { name: 'Lawns & landscape', note: 'Steady color, resilient roots', symbol: 'L' },
-  { name: 'Indoor plants', note: 'Gentle care for potted greens', symbol: 'I' },
+  { name: 'Vegetables', icon: '🥕', note: 'For abundant kitchen gardens' },
+  { name: 'Flowers', icon: '✿', note: 'For vivid, longer blooms' },
+  { name: 'Lawns', icon: '⌁', note: 'For dense, resilient turf' },
+  { name: 'Indoor plants', icon: '♧', note: 'For steady, gentle growth' },
 ]
 
 export const products: Product[] = [
-  { id: 1, name: 'Garden All-Rounder 5-5-5', category: 'Vegetable gardens', description: 'A dependable slow-release blend for everyday garden growth.', price: 24, size: '10 kg bag', badge: 'Bestseller', tone: 'leaf' },
-  { id: 2, name: 'Citrus & Fruit Boost 6-3-6', category: 'Fruit & citrus', description: 'Potassium-rich nutrition for stronger blossom and brighter fruit.', price: 29, size: '8 kg bag', badge: 'Seasonal pick', tone: 'gold' },
-  { id: 3, name: 'Deep Root Lawn Feed 12-4-8', category: 'Lawns & landscape', description: 'Long-lasting lawn food formulated for even color and deep roots.', price: 34, size: '15 kg bag', tone: 'sage' },
-  { id: 4, name: 'Indoor Leaf Tonic 3-1-2', category: 'Indoor plants', description: 'A mild liquid concentrate for lush foliage without overfeeding.', price: 16, size: '750 ml bottle', badge: 'Gentle formula', tone: 'clay' },
+  { id: 1, name: 'Harvest Complete', description: 'A balanced, slow-release blend for vegetables, herbs, and fruiting plants.', category: 'Vegetables', formula: '5–5–5', price: 24, size: '4 lb bag', badge: 'Bestseller', tone: 'clay' },
+  { id: 2, name: 'Bloom & Root', description: 'Phosphorus-rich organic nutrition for strong roots and generous blossoms.', category: 'Flowers', formula: '3–7–4', price: 19, size: '3 lb bag', tone: 'gold' },
+  { id: 3, name: 'Verdant Lawn', description: 'Long-lasting nitrogen with iron for an even, deep-green lawn.', category: 'Lawns', formula: '10–2–4', price: 32, size: '12 lb bag', badge: 'Seasonal pick', tone: 'sage' },
+  { id: 4, name: 'Gentle Growth', description: 'A mild liquid concentrate designed for indoor foliage and tender roots.', category: 'Indoor plants', formula: '2–2–2', price: 16, size: '16 fl oz', tone: 'mist' },
 ]
